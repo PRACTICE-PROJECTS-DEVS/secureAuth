@@ -14,62 +14,60 @@ export default function BiometricScanner({ onResult }: BiometricScannerProps) {
   const handleScan = () => {
     if (state === 'scanning') return;
     setState('scanning');
-
     setTimeout(() => {
-      // Simulate ~90% success rate
       const success = Math.random() > 0.1;
       setState(success ? 'success' : 'failure');
       onResult(success);
     }, 2800);
   };
 
-  const handleRetry = () => {
-    setState('idle');
-  };
+  const handleRetry = () => setState('idle');
+
+  const borderColor =
+    state === 'scanning' ? 'var(--color-accent)' :
+    state === 'success'  ? 'var(--color-accent)' :
+    state === 'failure'  ? '#f87171' :
+    'var(--color-border)';
+
+  const bgColor =
+    state === 'scanning' ? 'color-mix(in srgb, var(--color-accent) 5%, transparent)' :
+    state === 'success'  ? 'color-mix(in srgb, var(--color-accent) 10%, transparent)' :
+    state === 'failure'  ? 'rgba(248,113,113,0.10)' :
+    'var(--color-surface2)';
 
   return (
     <div className="flex flex-col items-center gap-6 py-4">
-      {/* Fingerprint visual */}
       <div className="relative">
-        {/* Outer pulse rings */}
         {state === 'scanning' && (
           <>
-            <div className="absolute inset-0 rounded-full border-2 border-accent/30 animate-ping" style={{ animationDuration: '1.5s' }} />
-            <div className="absolute inset-[-8px] rounded-full border border-accent/20 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.3s' }} />
+            <div className="absolute inset-0 rounded-full border-2 animate-ping opacity-30" style={{ borderColor: 'var(--color-accent)', animationDuration: '1.5s' }} />
+            <div className="absolute inset-[-8px] rounded-full border animate-ping opacity-20" style={{ borderColor: 'var(--color-accent)', animationDuration: '2s', animationDelay: '0.3s' }} />
           </>
         )}
 
         <div
-          className={`
-            relative w-32 h-32 rounded-full border-2 flex items-center justify-center cursor-pointer
-            transition-all duration-500 select-none
-            ${state === 'idle' ? 'border-border bg-surface2 hover:border-accent/50 hover:bg-surface hover:shadow-[0_0_30px_rgba(74,222,128,0.1)]'
-              : state === 'scanning' ? 'border-accent bg-accent/5 shadow-[0_0_40px_rgba(74,222,128,0.2)]'
-              : state === 'success' ? 'border-accent bg-accent/10 shadow-[0_0_50px_rgba(74,222,128,0.3)]'
-              : 'border-danger bg-danger/10 shadow-[0_0_30px_rgba(248,113,113,0.2)]'
-            }
-          `}
+          className="relative w-32 h-32 rounded-full border-2 flex items-center justify-center cursor-pointer transition-all duration-500 select-none"
+          style={{
+            borderColor,
+            background: bgColor,
+            boxShadow: state !== 'idle'
+              ? `0 0 40px color-mix(in srgb, ${borderColor} 20%, transparent)`
+              : 'none',
+          }}
           onClick={state === 'idle' ? handleScan : undefined}
         >
-          {/* Scan line */}
           {state === 'scanning' && (
             <div
-              className="absolute left-4 right-4 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent animate-scan"
-              style={{ boxShadow: '0 0 8px rgba(74,222,128,0.6)' }}
+              className="absolute left-4 right-4 h-0.5 animate-scan"
+              style={{
+                background: `linear-gradient(to right, transparent, var(--color-accent), transparent)`,
+                boxShadow: '0 0 8px var(--color-accent)',
+              }}
             />
           )}
 
-          {/* Icon */}
-          {state === 'idle' || state === 'scanning' ? (
-            <svg
-              viewBox="0 0 80 80"
-              className={`w-16 h-16 transition-all duration-300 ${state === 'scanning' ? 'text-accent opacity-80' : 'text-muted'}`}
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-            >
-              {/* Fingerprint lines */}
+          {(state === 'idle' || state === 'scanning') ? (
+            <svg viewBox="0 0 80 80" className="w-16 h-16" fill="none" stroke={state === 'scanning' ? 'var(--color-accent)' : 'var(--color-muted)'} strokeWidth="1.5" strokeLinecap="round" style={{ transition: 'stroke 0.3s', opacity: state === 'scanning' ? 0.8 : 1 }}>
               <path d="M40 18 C30 18, 22 26, 22 36 C22 42, 24 47, 28 51" opacity="0.5"/>
               <path d="M40 22 C32 22, 26 28, 26 36 C26 41, 28 45, 31 49"/>
               <path d="M40 26 C34 26, 30 30, 30 36 C30 40, 32 44, 35 47"/>
@@ -85,62 +83,62 @@ export default function BiometricScanner({ onResult }: BiometricScannerProps) {
               <line x1="49" y1="54" x2="53" y2="60"/>
             </svg>
           ) : state === 'success' ? (
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-              <polyline points="22 4 12 14.01 9 11.01" />
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
             </svg>
           ) : (
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
+              <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
             </svg>
           )}
         </div>
       </div>
 
-      {/* Status text */}
       <div className="text-center space-y-1">
         {state === 'idle' && (
           <>
-            <p className="text-[#e8eaf6] font-semibold">Touch to Scan</p>
-            <p className="text-muted text-sm font-mono">Place your finger on the sensor</p>
+            <p className="font-semibold" style={{ color: 'var(--color-text)' }}>Touch to Scan</p>
+            <p className="text-sm font-mono" style={{ color: 'var(--color-muted)' }}>Place your finger on the sensor</p>
           </>
         )}
         {state === 'scanning' && (
           <>
-            <p className="text-accent font-semibold">Scanning…</p>
-            <p className="text-muted text-sm font-mono">Hold still while we verify</p>
+            <p className="font-semibold" style={{ color: 'var(--color-accent)' }}>Scanning…</p>
+            <p className="text-sm font-mono" style={{ color: 'var(--color-muted)' }}>Hold still while we verify</p>
           </>
         )}
         {state === 'success' && (
           <>
-            <p className="text-accent font-semibold">Biometric Verified</p>
-            <p className="text-muted text-sm font-mono">Identity confirmed successfully</p>
+            <p className="font-semibold" style={{ color: 'var(--color-accent)' }}>Biometric Verified</p>
+            <p className="text-sm font-mono" style={{ color: 'var(--color-muted)' }}>Identity confirmed successfully</p>
           </>
         )}
         {state === 'failure' && (
           <>
-            <p className="text-danger font-semibold">Verification Failed</p>
-            <p className="text-muted text-sm font-mono">Could not match biometric data</p>
+            <p className="font-semibold text-danger">Verification Failed</p>
+            <p className="text-sm font-mono" style={{ color: 'var(--color-muted)' }}>Could not match biometric data</p>
           </>
         )}
       </div>
 
-      {/* Action buttons */}
       {state === 'idle' && (
         <button
           onClick={handleScan}
-          className="px-8 py-3 bg-accent text-bg font-bold text-sm rounded-xl hover:bg-accent/90 transition-all duration-200 shadow-[0_0_20px_rgba(74,222,128,0.25)] hover:shadow-[0_0_30px_rgba(74,222,128,0.4)] active:scale-95"
+          className="px-8 py-3 font-bold text-sm rounded-xl active:scale-95 transition-all duration-200"
+          style={{
+            background: 'var(--color-accent)',
+            color: 'var(--color-bg)',
+            boxShadow: '0 0 20px color-mix(in srgb, var(--color-accent) 25%, transparent)',
+          }}
         >
           Begin Scan
         </button>
       )}
-
       {state === 'failure' && (
         <button
           onClick={handleRetry}
-          className="px-8 py-3 border border-danger/50 text-danger font-bold text-sm rounded-xl hover:bg-danger/10 transition-all duration-200 active:scale-95"
+          className="px-8 py-3 font-bold text-sm rounded-xl active:scale-95 transition-all duration-200 text-danger"
+          style={{ border: '1px solid rgba(248,113,113,0.4)' }}
         >
           Try Again
         </button>

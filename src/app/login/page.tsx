@@ -130,14 +130,14 @@ export default function LoginPage() {
       <AuthCard>
         {/* Header */}
         <div className="text-center mb-8 animate-fade-up">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 mb-4">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[var(--color-accent-dim)] border border-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] mb-4">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight text-gradient-green">SecureAuth</h1>
-          <p className="text-muted text-sm font-mono mt-1">Multi-Factor Authentication System</p>
+          <p className="text-[var(--color-muted)] text-sm font-mono mt-1">Multi-Factor Authentication System</p>
         </div>
 
         <StepIndicator currentStep={1} />
@@ -161,11 +161,11 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div className="animate-fade-up delay-100">
-            <label className="block text-xs font-mono font-medium text-muted uppercase tracking-widest mb-2">
+            <label className="block text-xs font-mono font-medium text-[var(--color-muted)] uppercase tracking-widest mb-2">
               Email Address
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                   <polyline points="22,6 12,13 2,6"/>
@@ -178,11 +178,11 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 disabled={lockedOut}
                 className={`
-                  w-full pl-10 pr-4 py-3.5 rounded-xl border bg-surface2 font-mono text-sm
-                  text-[#e8eaf6] placeholder:text-muted outline-none transition-all duration-200
+                  w-full pl-10 pr-4 py-3.5 rounded-xl border bg-[var(--color-surface2)] font-mono text-sm
+                  text-[var(--color-text)] placeholder:text-[var(--color-muted)] outline-none transition-all duration-200
                   disabled:opacity-40 disabled:cursor-not-allowed
                   ${errors.email ? 'border-danger focus:border-danger shadow-[0_0_10px_rgba(248,113,113,0.1)]'
-                    : 'border-border focus:border-accent/60 focus:shadow-[0_0_12px_rgba(74,222,128,0.1)]'}
+                    : 'border-[var(--color-border)] focus:border-accent/60 focus:shadow-[0_0_12px_rgba(74,222,128,0.1)]'}
                 `}
               />
             </div>
@@ -198,11 +198,11 @@ export default function LoginPage() {
 
           {/* Password */}
           <div className="animate-fade-up delay-200">
-            <label className="block text-xs font-mono font-medium text-muted uppercase tracking-widest mb-2">
+            <label className="block text-xs font-mono font-medium text-[var(--color-muted)] uppercase tracking-widest mb-2">
               Password
             </label>
             <div className="relative">
-              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">
+              <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
@@ -214,17 +214,17 @@ export default function LoginPage() {
                 placeholder="••••••••••••"
                 disabled={lockedOut}
                 className={`
-                  w-full pl-10 pr-12 py-3.5 rounded-xl border bg-surface2 font-mono text-sm
-                  text-[#e8eaf6] placeholder:text-muted outline-none transition-all duration-200
+                  w-full pl-10 pr-12 py-3.5 rounded-xl border bg-[var(--color-surface2)] font-mono text-sm
+                  text-[var(--color-text)] placeholder:text-[var(--color-muted)] outline-none transition-all duration-200
                   disabled:opacity-40 disabled:cursor-not-allowed
                   ${errors.password ? 'border-danger focus:border-danger shadow-[0_0_10px_rgba(248,113,113,0.1)]'
-                    : 'border-border focus:border-accent/60 focus:shadow-[0_0_12px_rgba(74,222,128,0.1)]'}
+                    : 'border-[var(--color-border)] focus:border-accent/60 focus:shadow-[0_0_12px_rgba(74,222,128,0.1)]'}
                 `}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-muted hover:text-[#e8eaf6] transition-colors"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text)] transition-colors"
               >
                 {showPassword ? (
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -275,9 +275,9 @@ export default function LoginPage() {
             type="submit"
             disabled={loading || lockedOut}
             className="
-              w-full py-3.5 rounded-xl font-bold text-sm bg-accent text-bg
+              w-full py-3.5 rounded-xl font-bold text-sm bg-[var(--color-accent)] text-[var(--color-bg)]
               shadow-[0_0_25px_rgba(74,222,128,0.2)] hover:shadow-[0_0_35px_rgba(74,222,128,0.35)]
-              hover:bg-accent/90 active:scale-[0.98] transition-all duration-200
+              hover:bg-[color-mix(in_srgb,var(--color-accent)_90%,transparent)] active:scale-[0.98] transition-all duration-200
               disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
               flex items-center justify-center gap-2 animate-fade-up delay-300
             "
@@ -302,12 +302,12 @@ export default function LoginPage() {
         </form>
 
         {/* Footer */}
-        <div className="mt-6 pt-5 border-t border-border animate-fade-up delay-400 space-y-3">
+        <div className="mt-6 pt-5 border-t border-[var(--color-border)] animate-fade-up delay-400 space-y-3">
           <div className="flex items-center justify-between">
-            <Link href="/forgot-password" className="text-xs text-muted hover:text-accent font-mono transition-colors">
+            <Link href="/forgot-password" className="text-xs text-[var(--color-muted)] hover:text-[var(--color-accent)] font-mono transition-colors">
               Forgot password?
             </Link>
-            <div className="flex items-center gap-1.5 text-xs text-muted font-mono">
+            <div className="flex items-center gap-1.5 text-xs text-[var(--color-muted)] font-mono">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
@@ -315,8 +315,8 @@ export default function LoginPage() {
             </div>
           </div>
           <div className="text-center">
-            <span className="text-xs text-muted font-mono">Don&apos;t have an account? </span>
-            <Link href="/register" className="text-xs font-bold text-accent hover:text-accent/80 font-mono transition-colors">
+            <span className="text-xs text-[var(--color-muted)] font-mono">Don&apos;t have an account? </span>
+            <Link href="/register" className="text-xs font-bold text-[var(--color-accent)] hover:text-[var(--color-accent)]/80 font-mono transition-colors">
               Create one →
             </Link>
           </div>
