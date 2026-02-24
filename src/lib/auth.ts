@@ -16,6 +16,8 @@ export const removeToken = () => {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user_id');
     localStorage.removeItem('auth_email');
+    localStorage.removeItem('otp_token');
+    localStorage.removeItem('requires_biometric');
   }
 };
 

@@ -27,12 +27,25 @@ export default function VerifyBiometricPage() {
 
     try {
       // ─── REAL API CALL ──────────────────────────────────────────────────
-      const res = await api.post('/auth/verify-biometric', { userId: getUserId() });
+      const otpToken = typeof window !== 'undefined' ? localStorage.getItem('otp_token') : null;
+
+      if (!otpToken) {
+        addToast('Session expired. Please log in again.', 'error');
+        setResult('failure');
+        router.push('/login');
+        return;
+      }
+
+      const res = await api.post('/auth/verify-biometric', {
+        userId: getUserId(),
+        otpToken,
+      });
       // ───────────────────────────────────────────────────────────────────
 
       const { token } = res.data.data;
       if (typeof window !== 'undefined') {
         localStorage.setItem('auth_token', token);
+        localStorage.removeItem('otp_token');
         localStorage.removeItem('requires_biometric');
       }
 

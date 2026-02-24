@@ -6,7 +6,7 @@ import AuthCard from '@/components/AuthCard';
 import StepIndicator from '@/components/StepIndicator';
 import OtpInput from '@/components/OtpInput';
 import { ToastContainer, useToast } from '@/components/Toast';
-import { getUserEmail } from '@/lib/auth';
+import { getUserEmail, getUserId } from '@/lib/auth';
 import api from '@/lib/axios';
 
 const RESEND_COOLDOWN = 60;
@@ -60,18 +60,30 @@ export default function VerifyOtpPage() {
 
       addToast('OTP verified successfully!', 'success');
 
-      const requiresBiometric =
-        res.data.data?.requiresBiometric ||
+      const { requiresBiometric, otpToken } = res.data.data;
+
+      // Store otpToken so biometric page can use it
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('otp_token', otpToken);
+      }
+
+      const needsBiometric =
+        requiresBiometric ||
         (typeof window !== 'undefined' && localStorage.getItem('requires_biometric') === 'true');
 
-      if (requiresBiometric) {
+      if (needsBiometric) {
         setTimeout(() => router.push('/verify-biometric'), 900);
       } else {
-        // Low risk — get token directly, skip biometric
-        const tokenRes = await api.post('/auth/issue-token', { userId: getUserId() });
+        // Low risk — skip biometric, exchange otpToken for full JWT
+        const tokenRes = await api.post('/auth/issue-token', {
+          userId: getUserId(),
+          otpToken,
+        });
         const { token } = tokenRes.data.data;
         if (typeof window !== 'undefined') {
           localStorage.setItem('auth_token', token);
+          localStorage.removeItem('otp_token');
+          localStorage.removeItem('requires_biometric');
         }
         setTimeout(() => router.push('/dashboard'), 900);
       }
