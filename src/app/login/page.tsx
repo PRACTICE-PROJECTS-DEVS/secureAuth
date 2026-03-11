@@ -316,8 +316,8 @@ export default function LoginPage() {
           </div>
           <div className="text-center">
             <span className="text-xs text-[var(--color-muted)] font-mono">Don&apos;t have an account? </span>
-            <Link href="/register" className="text-xs font-bold text-[var(--color-accent)] hover:text-[var(--color-accent)]/80 font-mono transition-colors">
-              Create one →
+            <Link href="/register" className="text-lg font-bold text-[var(--color-accent)] hover:text-[var(--color-accent)]/80 font-mono transition-colors">
+              Create your account here →
             </Link>
           </div>
         </div>
